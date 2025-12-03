@@ -1,0 +1,381 @@
+{
+  "metadata": {
+    "description": "Mapping of CMMC/NIST controls to AWS Terraform resource types",
+    "version": "1.0.0",
+    "author": "Cameron Hopkin",
+    "last_updated": "2025-11-20"
+  },
+  "resource_mappings": {
+    "aws_iam_policy": {
+      "controls": ["AC.L2-3.1.1", "AC.L2-3.1.2", "AC.L2-3.1.5", "AC.L2-3.1.7"],
+      "checks": {
+        "least_privilege": {
+          "description": "Check for overly permissive policies",
+          "severity": "high",
+          "patterns": {
+            "deny": ["\"Action\": \"*\"", "\"Resource\": \"*\""],
+            "require": []
+          }
+        },
+        "no_admin_access": {
+          "description": "Check for AdministratorAccess policy attachment",
+          "severity": "high",
+          "patterns": {
+            "deny": ["AdministratorAccess", "PowerUserAccess"],
+            "require": []
+          }
+        }
+      }
+    },
+    "aws_iam_role": {
+      "controls": ["AC.L2-3.1.1", "AC.L2-3.1.5", "IA.L2-3.5.1"],
+      "checks": {
+        "trust_policy": {
+          "description": "Validate trust relationship policies",
+          "severity": "high",
+          "patterns": {
+            "deny": ["\"Principal\": \"*\""],
+            "require": []
+          }
+        }
+      }
+    },
+    "aws_iam_user": {
+      "controls": ["AC.L2-3.1.1", "IA.L2-3.5.1", "IA.L2-3.5.2", "IA.L2-3.5.3"],
+      "checks": {
+        "mfa_enabled": {
+          "description": "Check for MFA device configuration",
+          "severity": "high",
+          "terraform_attributes": ["mfa_device"]
+        },
+        "console_access": {
+          "description": "Check for console access without MFA",
+          "severity": "high",
+          "related_resources": ["aws_iam_user_login_profile"]
+        }
+      }
+    },
+    "aws_security_group": {
+      "controls": ["AC.L2-3.1.1", "AC.L2-3.1.3", "SC.L2-3.13.1"],
+      "checks": {
+        "no_unrestricted_ingress": {
+          "description": "Check for 0.0.0.0/0 ingress rules",
+          "severity": "high",
+          "patterns": {
+            "deny": ["0.0.0.0/0", "::/0"],
+            "exceptions": ["port 443", "port 80"]
+          }
+        },
+        "no_unrestricted_egress": {
+          "description": "Check for unrestricted egress",
+          "severity": "medium",
+          "patterns": {
+            "deny": ["0.0.0.0/0 on all ports"]
+          }
+        },
+        "ssh_restricted": {
+          "description": "Check SSH access is restricted",
+          "severity": "high",
+          "patterns": {
+            "deny": ["port 22 from 0.0.0.0/0"]
+          }
+        },
+        "rdp_restricted": {
+          "description": "Check RDP access is restricted",
+          "severity": "high",
+          "patterns": {
+            "deny": ["port 3389 from 0.0.0.0/0"]
+          }
+        }
+      }
+    },
+    "aws_s3_bucket": {
+      "controls": ["AC.L2-3.1.1", "AC.L2-3.1.3", "SC.L2-3.13.16", "AU.L2-3.3.1"],
+      "checks": {
+        "encryption_enabled": {
+          "description": "Check for server-side encryption",
+          "severity": "high",
+          "related_resources": ["aws_s3_bucket_server_side_encryption_configuration"],
+          "terraform_attributes": ["server_side_encryption_configuration"]
+        },
+        "public_access_blocked": {
+          "description": "Check for public access block",
+          "severity": "high",
+          "related_resources": ["aws_s3_bucket_public_access_block"],
+          "required_settings": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          }
+        },
+        "versioning_enabled": {
+          "description": "Check for versioning (data protection)",
+          "severity": "medium",
+          "related_resources": ["aws_s3_bucket_versioning"]
+        },
+        "logging_enabled": {
+          "description": "Check for access logging",
+          "severity": "medium",
+          "related_resources": ["aws_s3_bucket_logging"]
+        }
+      }
+    },
+    "aws_ebs_volume": {
+      "controls": ["SC.L2-3.13.16"],
+      "checks": {
+        "encryption_enabled": {
+          "description": "Check for EBS volume encryption",
+          "severity": "high",
+          "terraform_attributes": ["encrypted"],
+          "required_value": true
+        }
+      }
+    },
+    "aws_rds_cluster": {
+      "controls": ["SC.L2-3.13.8", "SC.L2-3.13.16", "AU.L2-3.3.1"],
+      "checks": {
+        "storage_encrypted": {
+          "description": "Check for storage encryption",
+          "severity": "high",
+          "terraform_attributes": ["storage_encrypted"],
+          "required_value": true
+        },
+        "encryption_at_rest": {
+          "description": "Check for KMS encryption",
+          "severity": "high",
+          "terraform_attributes": ["kms_key_id"]
+        },
+        "deletion_protection": {
+          "description": "Check for deletion protection",
+          "severity": "medium",
+          "terraform_attributes": ["deletion_protection"]
+        }
+      }
+    },
+    "aws_db_instance": {
+      "controls": ["SC.L2-3.13.8", "SC.L2-3.13.16", "AU.L2-3.3.1"],
+      "checks": {
+        "storage_encrypted": {
+          "description": "Check for storage encryption",
+          "severity": "high",
+          "terraform_attributes": ["storage_encrypted"],
+          "required_value": true
+        },
+        "multi_az": {
+          "description": "Check for Multi-AZ deployment",
+          "severity": "medium",
+          "terraform_attributes": ["multi_az"]
+        },
+        "backup_retention": {
+          "description": "Check for backup retention period",
+          "severity": "medium",
+          "terraform_attributes": ["backup_retention_period"],
+          "min_value": 7
+        }
+      }
+    },
+    "aws_cloudtrail": {
+      "controls": ["AU.L2-3.3.1", "AU.L2-3.3.2", "AC.L2-3.1.7"],
+      "checks": {
+        "multi_region": {
+          "description": "Check for multi-region trail",
+          "severity": "high",
+          "terraform_attributes": ["is_multi_region_trail"],
+          "required_value": true
+        },
+        "log_file_validation": {
+          "description": "Check for log file integrity validation",
+          "severity": "high",
+          "terraform_attributes": ["enable_log_file_validation"],
+          "required_value": true
+        },
+        "encryption_enabled": {
+          "description": "Check for CloudTrail encryption",
+          "severity": "high",
+          "terraform_attributes": ["kms_key_id"]
+        },
+        "s3_bucket_logging": {
+          "description": "Check for S3 bucket logging destination",
+          "severity": "medium",
+          "terraform_attributes": ["s3_bucket_name"]
+        }
+      }
+    },
+    "aws_cloudwatch_log_group": {
+      "controls": ["AU.L2-3.3.1", "SI.L2-3.14.6"],
+      "checks": {
+        "retention_period": {
+          "description": "Check for log retention period",
+          "severity": "medium",
+          "terraform_attributes": ["retention_in_days"],
+          "min_value": 90
+        },
+        "encryption_enabled": {
+          "description": "Check for log group encryption",
+          "severity": "medium",
+          "terraform_attributes": ["kms_key_id"]
+        }
+      }
+    },
+    "aws_kms_key": {
+      "controls": ["SC.L2-3.13.11", "SC.L2-3.13.16"],
+      "checks": {
+        "key_rotation": {
+          "description": "Check for automatic key rotation",
+          "severity": "medium",
+          "terraform_attributes": ["enable_key_rotation"],
+          "required_value": true
+        },
+        "deletion_window": {
+          "description": "Check for appropriate deletion window",
+          "severity": "low",
+          "terraform_attributes": ["deletion_window_in_days"],
+          "min_value": 7
+        }
+      }
+    },
+    "aws_vpc": {
+      "controls": ["AC.L2-3.1.3", "SC.L2-3.13.1"],
+      "checks": {
+        "flow_logs_enabled": {
+          "description": "Check for VPC flow logs",
+          "severity": "high",
+          "related_resources": ["aws_flow_log"]
+        }
+      }
+    },
+    "aws_flow_log": {
+      "controls": ["AU.L2-3.3.1", "SC.L2-3.13.1", "SI.L2-3.14.6"],
+      "checks": {
+        "traffic_type": {
+          "description": "Check for comprehensive traffic logging",
+          "severity": "medium",
+          "terraform_attributes": ["traffic_type"],
+          "recommended_value": "ALL"
+        }
+      }
+    },
+    "aws_guardduty_detector": {
+      "controls": ["SI.L2-3.14.2", "SI.L2-3.14.6"],
+      "checks": {
+        "enabled": {
+          "description": "Check GuardDuty is enabled",
+          "severity": "high",
+          "terraform_attributes": ["enable"],
+          "required_value": true
+        }
+      }
+    },
+    "aws_config_configuration_recorder": {
+      "controls": ["CM.L2-3.4.1", "CM.L2-3.4.2", "SI.L2-3.14.1"],
+      "checks": {
+        "all_resources": {
+          "description": "Check for recording all resource types",
+          "severity": "high",
+          "terraform_attributes": ["recording_group.all_supported"]
+        }
+      }
+    },
+    "aws_lb": {
+      "controls": ["SC.L2-3.13.1", "SC.L2-3.13.8"],
+      "checks": {
+        "access_logging": {
+          "description": "Check for access logging enabled",
+          "severity": "medium",
+          "terraform_attributes": ["access_logs.enabled"]
+        },
+        "drop_invalid_headers": {
+          "description": "Check for dropping invalid HTTP headers",
+          "severity": "medium",
+          "terraform_attributes": ["drop_invalid_header_fields"]
+        }
+      }
+    },
+    "aws_lb_listener": {
+      "controls": ["SC.L2-3.13.8"],
+      "checks": {
+        "https_only": {
+          "description": "Check for HTTPS protocol",
+          "severity": "high",
+          "terraform_attributes": ["protocol"],
+          "required_values": ["HTTPS", "TLS"]
+        },
+        "ssl_policy": {
+          "description": "Check for secure SSL policy",
+          "severity": "high",
+          "terraform_attributes": ["ssl_policy"],
+          "recommended_values": [
+            "ELBSecurityPolicy-TLS13-1-2-2021-06",
+            "ELBSecurityPolicy-TLS-1-2-Ext-2018-06"
+          ]
+        }
+      }
+    },
+    "aws_instance": {
+      "controls": ["SC.L2-3.13.16", "CM.L2-3.4.1"],
+      "checks": {
+        "ebs_optimized": {
+          "description": "Check for EBS optimization",
+          "severity": "low",
+          "terraform_attributes": ["ebs_optimized"]
+        },
+        "monitoring_enabled": {
+          "description": "Check for detailed monitoring",
+          "severity": "medium",
+          "terraform_attributes": ["monitoring"]
+        },
+        "imdsv2_required": {
+          "description": "Check for IMDSv2 requirement",
+          "severity": "high",
+          "terraform_attributes": ["metadata_options.http_tokens"],
+          "required_value": "required"
+        }
+      }
+    },
+    "aws_ssm_parameter": {
+      "controls": ["SC.L2-3.13.16"],
+      "checks": {
+        "secure_string": {
+          "description": "Check for SecureString type for sensitive data",
+          "severity": "high",
+          "terraform_attributes": ["type"],
+          "recommended_value": "SecureString"
+        }
+      }
+    },
+    "aws_secretsmanager_secret": {
+      "controls": ["SC.L2-3.13.16", "IA.L2-3.5.2"],
+      "checks": {
+        "kms_encryption": {
+          "description": "Check for KMS encryption",
+          "severity": "medium",
+          "terraform_attributes": ["kms_key_id"]
+        },
+        "rotation_enabled": {
+          "description": "Check for automatic rotation",
+          "severity": "medium",
+          "related_resources": ["aws_secretsmanager_secret_rotation"]
+        }
+      }
+    }
+  },
+  "severity_levels": {
+    "critical": {
+      "description": "Immediate remediation required",
+      "sla_days": 1
+    },
+    "high": {
+      "description": "Remediation required within sprint",
+      "sla_days": 14
+    },
+    "medium": {
+      "description": "Remediation required within quarter",
+      "sla_days": 90
+    },
+    "low": {
+      "description": "Remediation as resources permit",
+      "sla_days": 180
+    }
+  }
+}

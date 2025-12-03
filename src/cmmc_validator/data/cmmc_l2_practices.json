@@ -1,0 +1,369 @@
+{
+  "metadata": {
+    "framework": "CMMC Level 2",
+    "version": "2.0",
+    "source": "NIST SP 800-171 Rev 2",
+    "total_practices": 110,
+    "generated_by": "Cameron Hopkin",
+    "last_updated": "2025-11-15"
+  },
+  "practices": {
+    "AC.L2-3.1.1": {
+      "id": "AC.L2-3.1.1",
+      "family": "AC",
+      "title": "Authorized Access Control",
+      "description": "Limit system access to authorized users, processes acting on behalf of authorized users, and devices (including other systems).",
+      "nist_reference": "3.1.1",
+      "assessment_objectives": [
+        "Authorized users are identified",
+        "Processes acting on behalf of authorized users are identified",
+        "Devices authorized to connect are identified",
+        "System access is limited to authorized users",
+        "System access is limited to processes acting on behalf of authorized users",
+        "System access is limited to authorized devices"
+      ],
+      "aws_controls": [
+        "IAM policies",
+        "Security groups",
+        "NACLs",
+        "VPC endpoints"
+      ]
+    },
+    "AC.L2-3.1.2": {
+      "id": "AC.L2-3.1.2",
+      "family": "AC",
+      "title": "Transaction & Function Control",
+      "description": "Limit system access to the types of transactions and functions that authorized users are permitted to execute.",
+      "nist_reference": "3.1.2",
+      "assessment_objectives": [
+        "Types of transactions authorized users are permitted to execute are defined",
+        "Types of functions authorized users are permitted to execute are defined",
+        "System access is limited to defined transactions",
+        "System access is limited to defined functions"
+      ],
+      "aws_controls": [
+        "IAM policies with conditions",
+        "Resource-based policies",
+        "Service control policies"
+      ]
+    },
+    "AC.L2-3.1.3": {
+      "id": "AC.L2-3.1.3",
+      "family": "AC",
+      "title": "Control CUI Flow",
+      "description": "Control the flow of CUI in accordance with approved authorizations.",
+      "nist_reference": "3.1.3",
+      "assessment_objectives": [
+        "Information flow policies are defined",
+        "Methods for controlling information flow are defined",
+        "Designated sources for CUI are identified",
+        "Designated destinations for CUI are identified",
+        "Authorizations for controlling flow are defined",
+        "Information flow is controlled in accordance with authorizations"
+      ],
+      "aws_controls": [
+        "VPC flow logs",
+        "Security groups",
+        "NACLs",
+        "AWS PrivateLink"
+      ]
+    },
+    "AC.L2-3.1.5": {
+      "id": "AC.L2-3.1.5",
+      "family": "AC",
+      "title": "Least Privilege",
+      "description": "Employ the principle of least privilege, including for specific security functions and privileged accounts.",
+      "nist_reference": "3.1.5",
+      "assessment_objectives": [
+        "Privileged accounts are identified",
+        "Access to privileged accounts is authorized",
+        "Security functions are identified",
+        "Access to security functions is authorized",
+        "Least privilege is employed"
+      ],
+      "aws_controls": [
+        "IAM policies",
+        "IAM roles",
+        "Permission boundaries",
+        "AWS Organizations SCPs"
+      ]
+    },
+    "AC.L2-3.1.7": {
+      "id": "AC.L2-3.1.7",
+      "family": "AC",
+      "title": "Privileged Functions",
+      "description": "Prevent non-privileged users from executing privileged functions and capture the execution of such functions in audit logs.",
+      "nist_reference": "3.1.7",
+      "assessment_objectives": [
+        "Privileged functions are defined",
+        "Non-privileged users are defined",
+        "Non-privileged users are prevented from executing privileged functions",
+        "Execution of privileged functions is captured in audit logs"
+      ],
+      "aws_controls": [
+        "IAM policies",
+        "CloudTrail",
+        "AWS Config rules"
+      ]
+    },
+    "AU.L2-3.3.1": {
+      "id": "AU.L2-3.3.1",
+      "family": "AU",
+      "title": "System Auditing",
+      "description": "Create and retain system audit logs and records to the extent needed to enable the monitoring, analysis, investigation, and reporting of unlawful or unauthorized system activity.",
+      "nist_reference": "3.3.1",
+      "assessment_objectives": [
+        "Audit logs needed to support monitoring are specified",
+        "Audit logs needed to support analysis are specified",
+        "Audit logs needed to support investigation are specified",
+        "Audit logs needed to support reporting are specified",
+        "Audit logs are created",
+        "Audit logs are retained",
+        "Audit logs support monitoring of unlawful activity",
+        "Audit logs support investigation of unlawful activity"
+      ],
+      "aws_controls": [
+        "CloudTrail",
+        "CloudWatch Logs",
+        "S3 access logging",
+        "VPC Flow Logs"
+      ]
+    },
+    "AU.L2-3.3.2": {
+      "id": "AU.L2-3.3.2",
+      "family": "AU",
+      "title": "User Accountability",
+      "description": "Ensure that the actions of individual system users can be uniquely traced to those users so they can be held accountable for their actions.",
+      "nist_reference": "3.3.2",
+      "assessment_objectives": [
+        "Content of audit records needed to support traceability is defined",
+        "Audit records contain content to trace actions to individual users"
+      ],
+      "aws_controls": [
+        "CloudTrail",
+        "IAM user identification",
+        "AWS SSO"
+      ]
+    },
+    "IA.L2-3.5.1": {
+      "id": "IA.L2-3.5.1",
+      "family": "IA",
+      "title": "Identification",
+      "description": "Identify system users, processes acting on behalf of users, and devices.",
+      "nist_reference": "3.5.1",
+      "assessment_objectives": [
+        "System users are identified",
+        "Processes acting on behalf of users are identified",
+        "Devices accessing the system are identified"
+      ],
+      "aws_controls": [
+        "IAM users",
+        "IAM roles",
+        "EC2 instance profiles",
+        "AWS SSO"
+      ]
+    },
+    "IA.L2-3.5.2": {
+      "id": "IA.L2-3.5.2",
+      "family": "IA",
+      "title": "Authentication",
+      "description": "Authenticate (or verify) the identities of users, processes, or devices, as a prerequisite to allowing access to organizational systems.",
+      "nist_reference": "3.5.2",
+      "assessment_objectives": [
+        "Users are authenticated before accessing systems",
+        "Processes are authenticated before accessing systems",
+        "Devices are authenticated before accessing systems"
+      ],
+      "aws_controls": [
+        "IAM authentication",
+        "MFA",
+        "AWS SSO",
+        "Cognito"
+      ]
+    },
+    "IA.L2-3.5.3": {
+      "id": "IA.L2-3.5.3",
+      "family": "IA",
+      "title": "Multi-Factor Authentication",
+      "description": "Use multifactor authentication for local and network access to privileged accounts and for network access to non-privileged accounts.",
+      "nist_reference": "3.5.3",
+      "assessment_objectives": [
+        "Privileged accounts are identified",
+        "MFA is implemented for local access to privileged accounts",
+        "MFA is implemented for network access to privileged accounts",
+        "MFA is implemented for network access to non-privileged accounts"
+      ],
+      "aws_controls": [
+        "IAM MFA",
+        "AWS SSO MFA",
+        "Virtual MFA",
+        "Hardware MFA"
+      ]
+    },
+    "SC.L2-3.13.1": {
+      "id": "SC.L2-3.13.1",
+      "family": "SC",
+      "title": "Boundary Protection",
+      "description": "Monitor, control, and protect communications (i.e., information transmitted or received by organizational systems) at the external boundaries and key internal boundaries of organizational systems.",
+      "nist_reference": "3.13.1",
+      "assessment_objectives": [
+        "External system boundaries are defined",
+        "Key internal boundaries are defined",
+        "Communications are monitored at external boundaries",
+        "Communications are controlled at external boundaries",
+        "Communications are protected at external boundaries",
+        "Communications are monitored at key internal boundaries",
+        "Communications are controlled at key internal boundaries",
+        "Communications are protected at key internal boundaries"
+      ],
+      "aws_controls": [
+        "Security groups",
+        "NACLs",
+        "AWS WAF",
+        "AWS Shield",
+        "VPC endpoints"
+      ]
+    },
+    "SC.L2-3.13.8": {
+      "id": "SC.L2-3.13.8",
+      "family": "SC",
+      "title": "Data in Transit",
+      "description": "Implement cryptographic mechanisms to prevent unauthorized disclosure of CUI during transmission unless otherwise protected by alternative physical safeguards.",
+      "nist_reference": "3.13.8",
+      "assessment_objectives": [
+        "Cryptographic mechanisms are identified",
+        "Cryptographic mechanisms prevent disclosure during transmission",
+        "Alternative physical safeguards are identified (if used)"
+      ],
+      "aws_controls": [
+        "TLS/SSL",
+        "ACM certificates",
+        "VPN",
+        "AWS PrivateLink"
+      ]
+    },
+    "SC.L2-3.13.11": {
+      "id": "SC.L2-3.13.11",
+      "family": "SC",
+      "title": "FIPS Cryptography",
+      "description": "Employ FIPS-validated cryptography when used to protect the confidentiality of CUI.",
+      "nist_reference": "3.13.11",
+      "assessment_objectives": [
+        "FIPS-validated cryptography is employed to protect CUI confidentiality"
+      ],
+      "aws_controls": [
+        "AWS KMS (FIPS 140-2)",
+        "CloudHSM",
+        "FIPS endpoints"
+      ]
+    },
+    "SC.L2-3.13.16": {
+      "id": "SC.L2-3.13.16",
+      "family": "SC",
+      "title": "Data at Rest",
+      "description": "Protect the confidentiality of CUI at rest.",
+      "nist_reference": "3.13.16",
+      "assessment_objectives": [
+        "CUI at rest is identified",
+        "Mechanisms to protect CUI at rest are defined",
+        "CUI at rest is protected"
+      ],
+      "aws_controls": [
+        "S3 encryption",
+        "EBS encryption",
+        "RDS encryption",
+        "KMS keys"
+      ]
+    },
+    "SI.L2-3.14.1": {
+      "id": "SI.L2-3.14.1",
+      "family": "SI",
+      "title": "Flaw Remediation",
+      "description": "Identify, report, and correct system flaws in a timely manner.",
+      "nist_reference": "3.14.1",
+      "assessment_objectives": [
+        "Time within which to identify flaws is specified",
+        "Time within which to report flaws is specified",
+        "Time within which to correct flaws is specified",
+        "System flaws are identified",
+        "System flaws are reported",
+        "System flaws are corrected"
+      ],
+      "aws_controls": [
+        "AWS Inspector",
+        "Systems Manager Patch Manager",
+        "Security Hub"
+      ]
+    },
+    "SI.L2-3.14.2": {
+      "id": "SI.L2-3.14.2",
+      "family": "SI",
+      "title": "Malicious Code Protection",
+      "description": "Provide protection from malicious code at appropriate locations within organizational systems.",
+      "nist_reference": "3.14.2",
+      "assessment_objectives": [
+        "Designated locations for malicious code protection are identified",
+        "Protection from malicious code is provided at designated locations"
+      ],
+      "aws_controls": [
+        "GuardDuty",
+        "AWS WAF",
+        "Security Hub"
+      ]
+    },
+    "SI.L2-3.14.6": {
+      "id": "SI.L2-3.14.6",
+      "family": "SI",
+      "title": "Security Monitoring",
+      "description": "Monitor organizational systems, including inbound and outbound communications traffic, to detect attacks and indicators of potential attacks.",
+      "nist_reference": "3.14.6",
+      "assessment_objectives": [
+        "The system is monitored to detect attacks",
+        "The system is monitored to detect indicators of attacks",
+        "Inbound communications traffic is monitored",
+        "Outbound communications traffic is monitored"
+      ],
+      "aws_controls": [
+        "GuardDuty",
+        "CloudWatch",
+        "VPC Flow Logs",
+        "Security Hub"
+      ]
+    },
+    "CM.L2-3.4.1": {
+      "id": "CM.L2-3.4.1",
+      "family": "CM",
+      "title": "System Baselining",
+      "description": "Establish and maintain baseline configurations and inventories of organizational systems (including hardware, software, firmware, and documentation) throughout the respective system development life cycles.",
+      "nist_reference": "3.4.1",
+      "assessment_objectives": [
+        "Baseline configuration is established",
+        "Baseline configuration is maintained",
+        "System inventory is established",
+        "System inventory is maintained"
+      ],
+      "aws_controls": [
+        "AWS Config",
+        "Systems Manager Inventory",
+        "CloudFormation",
+        "Terraform state"
+      ]
+    },
+    "CM.L2-3.4.2": {
+      "id": "CM.L2-3.4.2",
+      "family": "CM",
+      "title": "Security Configuration Enforcement",
+      "description": "Establish and enforce security configuration settings for information technology products employed in organizational systems.",
+      "nist_reference": "3.4.2",
+      "assessment_objectives": [
+        "Security configuration settings are established",
+        "Security configuration settings are enforced"
+      ],
+      "aws_controls": [
+        "AWS Config rules",
+        "Systems Manager State Manager",
+        "Security Hub standards"
+      ]
+    }
+  }
+}
